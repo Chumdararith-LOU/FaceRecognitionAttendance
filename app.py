@@ -3,6 +3,7 @@ from flask_migrate import Migrate
 from config import config_by_name
 from models.database import db
 from models import Student
+from routes.registration import registration_bp
 
 migrate = Migrate()
 
@@ -17,7 +18,10 @@ def create_app(config_name='development'):
     db.init_app(app)
     migrate.init_app(app, db)
 
-    # A simple test route
+    # Register the blueprint
+    app.register_blueprint(registration_bp)
+    
+    #  A simple test route
     @app.route('/')
     def hello():
         return "Smart Attendance System is running!"
