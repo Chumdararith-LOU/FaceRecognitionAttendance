@@ -1,0 +1,17 @@
+# Environment variables
+.env
+
+# Python cache
+__pycache__/
+
+# Virtual environments (if you have one)
+venv/
+.venv/
+
+# Ignore local migrations if you don't want them in Git
+# (Uncomment the next line if you decide to exclude migrations)
+# migrations/
+
+# OS-specific junk
+.DS_Store
+Thumbs.db
