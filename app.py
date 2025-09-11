@@ -4,6 +4,7 @@ from config import config_by_name
 from models.database import db
 from models import Student
 from routes.registration import registration_bp
+from routes.view_routes import view_bp
 
 migrate = Migrate()
 
@@ -13,6 +14,9 @@ def create_app(config_name='development'):
     """
     app = Flask(__name__)
     app.config.from_object(config_by_name[config_name])
+
+    # Register the view blueprint
+    app.register_blueprint(view_bp)
 
     # Initialize extensions
     db.init_app(app)

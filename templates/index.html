@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Smart Attendance System</h1>
+        <h2>Register New Student</h2>
+    
+        <div class="registration-form">
+            <video id="camera-feed" width="500" height="375" autoplay playsinline></video>
+            <canvas id="photo-canvas" width="500" height="375" style="display: none;"></canvas>
+    
+            <form id="student-form">
+                <div class="form-group">
+                    <label for="full_name">Full Name</label>
+                    <input type="text" id="full_name" name="full_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="student_code">Student Code</label>
+                    <input type="text" id="student_code" name="student_code" required>
+                </div>
+                <button type="submit" id="register-btn">Capture & Register</button>
+            </form>
+            <div id="status-message"></div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/camera.js') }}"></script>
+</body>
+</html>
