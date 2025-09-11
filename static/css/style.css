@@ -78,3 +78,65 @@ button:hover {
     margin-top: 15px;
     font-size: 14px;
 }
+
+.dashboard-layout {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+}
+
+.video-container {
+    flex-shrink: 0;
+}
+
+.attendance-container {
+    flex-grow: 1;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 20px;
+    min-width: 300px;
+}
+
+.attendance-container h2 {
+    margin-top: 0;
+    color: #495057;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 10px;
+}
+
+#attendance-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    max-height: 400px;
+    /* Adjust as needed */
+    overflow-y: auto;
+}
+
+#attendance-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 10px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+#attendance-list li:last-child {
+    border-bottom: none;
+}
+
+#attendance-list li .student-name {
+    font-weight: 500;
+    color: #343a40;
+}
+
+#attendance-list li .timestamp {
+    font-size: 0.9em;
+    color: #6c757d;
+}
+
+#attendance-list li.no-students,
+#attendance-list li.error {
+    justify-content: center;
+    color: #6c757d;
+}
