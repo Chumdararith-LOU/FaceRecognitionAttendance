@@ -39,8 +39,9 @@ def create_app(config_name='development'):
 # Create the app instance for running
 app = create_app()
 
+with app.app_context():
+    print("Application context created. Loading known faces from the database...")
+    load_known_faces()
+
 if __name__ == '__main__':
     app.run(debug=True)
-
-with app.app_context():
-    load_known_faces()
