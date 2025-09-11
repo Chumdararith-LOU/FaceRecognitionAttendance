@@ -5,6 +5,7 @@ from models.database import db
 from models import Student, User, AttendanceRecord
 from routes.registration import registration_bp
 from routes.view_routes import view_bp
+from routes.dashboard import dashboard_bp
 
 migrate = Migrate()
 
@@ -17,6 +18,8 @@ def create_app(config_name='development'):
 
     # Register the view blueprint
     app.register_blueprint(view_bp)
+
+    app.register_blueprint(dashboard_bp)
 
     # Initialize extensions
     db.init_app(app)

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Live Attendance Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Live Attendance Feed</h1>
+        <div class="video-container">
+            <img src="{{ url_for('dashboard_api.video_feed') }}" width="800" alt="Live Feed">
+        </div>
+    </div>
+</body>
+
+</html>

@@ -32,3 +32,4 @@ face-recognition
 bcrypt
 psycopg2-binary
 Flask-Login
+opencv-python
