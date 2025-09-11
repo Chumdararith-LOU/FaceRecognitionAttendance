@@ -7,6 +7,7 @@ from models import AttendanceRecord, Student
 from sqlalchemy import func
 from datetime import date
 from models.database import db
+from flask_login import login_required
 
 dashboard_bp = Blueprint('dashboard_api', __name__)
 
@@ -36,6 +37,7 @@ def generate_frames():
                    b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n')
 
 @dashboard_bp.route('/dashboard')
+@login_required
 def dashboard():
     """Renders the dashboard page."""
     return render_template('dashboard.html')
@@ -49,24 +51,31 @@ def video_feed():
 @dashboard_bp.route('/api/attendance/today', methods=['GET'])
 def get_todays_attendance():
     """
-    Returns a list of students marked present today.
+    Returns a list of students marked present today, showing the most recent time.
     """
     today = date.today()
-    
-    # Query that joins AttendanceRecord with Student and filters for today
-    records = db.session.query(
-        Student.full_name,
-        func.min(AttendanceRecord.timestamp).label('first_seen')
-    ).join(Student, AttendanceRecord.student_id == Student.id)\
-     .filter(func.date(AttendanceRecord.timestamp) == today)\
-     .group_by(Student.full_name)\
-     .order_by('first_seen')\
-     .all()
 
-    # Format the data for JSON response
-    attendance_list = [
-        {"full_name": record.full_name, "timestamp": record.first_seen.strftime("%I:%M:%S %p")}
-        for record in records
-    ]
-    
-    return jsonify(attendance_list)
+    # --- REVISED AND MORE ROBUST QUERY ---
+    try:
+        # Using func.cast for safer date comparison and ordering by the aggregate function
+        records = db.session.query(
+            Student.full_name,
+            func.max(AttendanceRecord.timestamp).label('last_seen')
+        ).join(Student, AttendanceRecord.student_id == Student.id)\
+         .filter(func.cast(AttendanceRecord.timestamp, db.Date) == today)\
+         .group_by(Student.id, Student.full_name)\
+         .order_by(func.max(AttendanceRecord.timestamp).desc())\
+         .all()
+
+        attendance_list = [
+            {"full_name": record.full_name, "timestamp": record.last_seen.strftime("%I:%M:%S %p")}
+            for record in records
+        ]
+        
+        return jsonify(attendance_list)
+
+    except Exception as e:
+        # Log the actual error to the server console for debugging
+        print(f"!!! DATABASE ERROR in get_todays_attendance: {e}")
+        # Return a proper JSON error response to the frontend
+        return jsonify({"error": "An internal server error occurred."}), 500

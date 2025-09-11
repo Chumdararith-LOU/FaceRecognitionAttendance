@@ -7,6 +7,8 @@ from routes.registration import registration_bp
 from routes.view_routes import view_bp
 from routes.dashboard import dashboard_bp
 from services.attendance_service import load_known_faces
+from flask_login import LoginManager
+from routes.auth import auth_bp
 
 migrate = Migrate()
 
@@ -17,9 +19,16 @@ def create_app(config_name='development'):
     app = Flask(__name__)
     app.config.from_object(config_by_name[config_name])
 
+    login_manager = LoginManager()
+    login_manager.init_app(app)
+    login_manager.login_view = 'auth_api.login' # type: ignore
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
+
     # Register the view blueprint
     app.register_blueprint(view_bp)
-
     app.register_blueprint(dashboard_bp)
 
     # Initialize extensions
@@ -28,6 +37,7 @@ def create_app(config_name='development'):
 
     # Register the blueprint
     app.register_blueprint(registration_bp)
+    app.register_blueprint(auth_bp)
     
     #  A simple test route
     @app.route('/')
