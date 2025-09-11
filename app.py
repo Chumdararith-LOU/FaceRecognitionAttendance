@@ -2,7 +2,7 @@ from flask import Flask
 from flask_migrate import Migrate
 from config import config_by_name
 from models.database import db
-from models import Student
+from models import Student, User, AttendanceRecord
 from routes.registration import registration_bp
 from routes.view_routes import view_bp
 
