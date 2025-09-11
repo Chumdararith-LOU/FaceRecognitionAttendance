@@ -2,7 +2,7 @@
 
 from flask import Blueprint, render_template, Response
 import cv2
-from services.attendance_service import process_video_frame
+from services.attendance_service import recognize_faces_in_frame
 
 dashboard_bp = Blueprint('dashboard_api', __name__)
 
@@ -21,7 +21,7 @@ def generate_frames():
             break
         else:
             # Process the frame (detect faces, etc.)
-            processed_frame = process_video_frame(frame)
+            processed_frame = recognize_faces_in_frame(frame)
 
             # Encode the frame in JPEG format
             ret, buffer = cv2.imencode('.jpg', processed_frame)

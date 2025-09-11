@@ -6,6 +6,7 @@ from models import Student, User, AttendanceRecord
 from routes.registration import registration_bp
 from routes.view_routes import view_bp
 from routes.dashboard import dashboard_bp
+from services.attendance_service import load_known_faces
 
 migrate = Migrate()
 
@@ -40,3 +41,6 @@ app = create_app()
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+with app.app_context():
+    load_known_faces()
