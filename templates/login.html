@@ -3,33 +3,56 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Login - Smart Attendance</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Smart Attendance System</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
-    <div class="container">
-        <h1>Admin Login</h1>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="logo-large">
+                    <i class="fas fa-camera"></i>
+                </div>
+                <h1>Smart Attendance</h1>
+                <p>Administrator Login</p>
+            </div>
 
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <div class="flash-message">
-            {{ messages[0] }}
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <div class="flash-message error">
+                <i class="fas fa-exclamation-circle"></i>
+                {{ messages[0] }}
+            </div>
+            {% endif %}
+            {% endwith %}
+
+            <form method="POST" action="{{ url_for('auth_api.login') }}" class="login-form">
+                <div class="form-group">
+                    <label for="username">
+                        <i class="fas fa-user"></i> Username
+                    </label>
+                    <input type="text" id="username" name="username" required placeholder="Enter your username">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">
+                        <i class="fas fa-lock"></i> Password
+                    </label>
+                    <input type="password" id="password" name="password" required placeholder="Enter your password">
+                </div>
+
+                <button type="submit" class="login-btn">
+                    <i class="fas fa-sign-in-alt"></i> Sign In
+                </button>
+            </form>
+
+            <div class="login-footer">
+                <p>Secure access for authorized personnel only</p>
+            </div>
         </div>
-        {% endif %}
-        {% endwith %}
-
-        <form method="POST" action="{{ url_for('auth_api.login') }}">
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            <button type="submit">Login</button>
-        </form>
     </div>
 </body>
 

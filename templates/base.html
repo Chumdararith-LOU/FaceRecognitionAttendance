@@ -3,22 +3,46 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Smart Attendance{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Smart Attendance System{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
-    <div class="container">
-        <nav class="main-nav">
-            <a href="{{ url_for('dashboard_api.dashboard') }}">Dashboard</a>
-            <a href="{{ url_for('views.registration_page') }}">Register Student</a>
-            <a href="{{ url_for('admin_api.manual_attendance') }}">Admin Panel</a>
-            <a href="{{ url_for('auth_api.logout') }}">Logout</a>
-        </nav>
+    <div class="app-container">
+        <header class="app-header">
+            <div class="header-content">
+                <h1 class="logo">
+                    <i class="fas fa-camera"></i>
+                    Smart Attendance
+                </h1>
+                <nav class="main-nav">
+                    <a href="{{ url_for('dashboard_api.dashboard') }}" class="nav-link">
+                        <i class="fas fa-tachometer-alt"></i> Dashboard
+                    </a>
+                    <a href="{{ url_for('views.registration_page') }}" class="nav-link">
+                        <i class="fas fa-user-plus"></i> Register
+                    </a>
+                    <a href="{{ url_for('admin_api.manual_attendance') }}" class="nav-link">
+                        <i class="fas fa-cog"></i> Admin
+                    </a>
+                    <a href="{{ url_for('auth_api.logout') }}" class="nav-link">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </nav>
+            </div>
+        </header>
 
-        <main>
-            {% block content %}{% endblock %}
+        <main class="main-content">
+            <div class="content-container">
+                {% block content %}{% endblock %}
+            </div>
         </main>
+
+        <footer class="app-footer">
+            <p>&copy; 2023 Smart Attendance System. All rights reserved.</p>
+        </footer>
     </div>
 </body>
 

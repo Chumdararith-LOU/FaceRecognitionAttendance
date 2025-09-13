@@ -1,59 +1,92 @@
 {% extends "base.html" %}
 
-{% block title %}Admin Panel{% endblock %}
+{% block title %}Admin Panel - Smart Attendance{% endblock %}
 
 {% block content %}
-<h2>Admin Panel</h2>
+<div class="admin-container">
+    <div class="admin-header">
+        <h1><i class="fas fa-cog"></i> Administration Panel</h1>
+        <p>Manage students and attendance records</p>
+    </div>
 
-<div class="admin-section">
-    <h3>Manual Attendance Override</h3>
-    <p>Select a student from the list to mark them as present for today.</p>
+    <div class="admin-content">
+        <div class="admin-card">
+            <div class="card-header">
+                <h3><i class="fas fa-calendar-plus"></i> Manual Attendance</h3>
+            </div>
+            <div class="card-body">
+                <p>Select a student to manually mark them as present for today.</p>
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-    {% for category, message in messages %}
-    <div class="flash-message flash-{{ category }}">{{ message }}</div>
-    {% endfor %}
-    {% endif %}
-    {% endwith %}
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                {% for category, message in messages %}
+                <div class="flash-message flash-{{ category }}">
+                    <i class="fas fa-{{ 'check-circle' if category == 'success' else 'exclamation-circle' }}"></i>
+                    {{ message }}
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
 
-    <form method="POST" action="{{ url_for('admin_api.manual_attendance') }}" class="manual-attendance-form">
-        <select name="student_id" required>
-            <option value="" disabled selected>Select a student...</option>
-            {% for student in students %}
-            <option value="{{ student.id }}">{{ student.full_name }} ({{ student.student_code }})</option>
-            {% endfor %}
-        </select>
-        <button type="submit" class="btn">Mark Present</button>
-    </form>
-</div>
+                <form method="POST" action="{{ url_for('admin_api.manual_attendance') }}"
+                    class="manual-attendance-form">
+                    <div class="form-group">
+                        <label for="student-select">
+                            <i class="fas fa-user-graduate"></i> Select Student
+                        </label>
+                        <select id="student-select" name="student_id" required>
+                            <option value="" disabled selected>Choose a student...</option>
+                            {% for student in students %}
+                            <option value="{{ student.id }}">{{ student.full_name }} ({{ student.student_code }})
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="primary-btn">
+                        <i class="fas fa-check-circle"></i> Mark Present
+                    </button>
+                </form>
+            </div>
+        </div>
 
-<div class="admin-section">
-    <h3>Student Management</h3>
-    <table id="student-table">
-        <thead>
-            <tr>
-                <th>Student Code</th>
-                <th>Full Name</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for student in students %}
-            <tr id="student-row-{{ student.id }}">
-                <td>{{ student.student_code }}</td>
-                <td>{{ student.full_name }}</td>
-                <td>
-                    <button class="delete-btn" data-student-id="{{ student.id }}">Delete</button>
-                </td>
-            </tr>
-            {% else %}
-            <tr>
-                <td colspan="3">No students registered yet.</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        <div class="admin-card">
+            <div class="card-header">
+                <h3><i class="fas fa-users-cog"></i> Student Management</h3>
+            </div>
+            <div class="card-body">
+                <div class="table-container">
+                    <table id="student-table" class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Student ID</th>
+                                <th>Full Name</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for student in students %}
+                            <tr id="student-row-{{ student.id }}">
+                                <td>{{ student.student_code }}</td>
+                                <td>{{ student.full_name }}</td>
+                                <td>
+                                    <button class="danger-btn delete-btn" data-student-id="{{ student.id }}">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="3" class="no-data">
+                                    <i class="fas fa-info-circle"></i> No students registered yet.
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script src="{{ url_for('static', filename='js/admin.js') }}"></script>

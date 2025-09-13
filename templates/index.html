@@ -1,35 +1,57 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
-    <div class="container">
-        <h1>Smart Attendance System</h1>
-        <h2>Register New Student</h2>
-    
-        <div class="registration-form">
-            <video id="camera-feed" width="500" height="375" autoplay playsinline></video>
-            <canvas id="photo-canvas" width="500" height="375" style="display: none;"></canvas>
-    
-            <form id="student-form">
-                <div class="form-group">
-                    <label for="full_name">Full Name</label>
-                    <input type="text" id="full_name" name="full_name" required>
-                </div>
-                <div class="form-group">
-                    <label for="student_code">Student Code</label>
-                    <input type="text" id="student_code" name="student_code" required>
-                </div>
-                <button type="submit" id="register-btn">Capture & Register</button>
-            </form>
-            <div id="status-message"></div>
-        </div>
+{% extends "base.html" %}
+
+{% block title %}Register Student - Smart Attendance{% endblock %}
+
+{% block content %}
+<div class="registration-container">
+    <div class="page-header">
+        <h1><i class="fas fa-user-graduate"></i> Student Registration</h1>
+        <p>Register new students with facial recognition</p>
     </div>
 
-    <script src="{{ url_for('static', filename='js/camera.js') }}"></script>
-</body>
-</html>
+    <div class="registration-content">
+        <div class="camera-section">
+            <div class="camera-frame">
+                <video id="camera-feed" width="500" height="375" autoplay playsinline></video>
+                <div class="camera-overlay">
+                    <div class="face-guide"></div>
+                </div>
+                <canvas id="photo-canvas" width="500" height="375" style="display: none;"></canvas>
+            </div>
+            <div class="camera-instructions">
+                <p><i class="fas fa-lightbulb"></i> Position your face within the circle and ensure good lighting</p>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <form id="student-form" class="styled-form">
+                <div class="form-header">
+                    <h3>Student Information</h3>
+                </div>
+
+                <div class="form-group">
+                    <label for="full_name">
+                        <i class="fas fa-signature"></i> Full Name
+                    </label>
+                    <input type="text" id="full_name" name="full_name" required placeholder="Enter student's full name">
+                </div>
+
+                <div class="form-group">
+                    <label for="student_code">
+                        <i class="fas fa-id-card"></i> Student ID
+                    </label>
+                    <input type="text" id="student_code" name="student_code" required placeholder="Enter student ID">
+                </div>
+
+                <button type="submit" id="register-btn" class="primary-btn">
+                    <i class="fas fa-camera"></i> Capture & Register
+                </button>
+
+                <div id="status-message" class="status-message"></div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/camera.js') }}"></script>
+{% endblock %}

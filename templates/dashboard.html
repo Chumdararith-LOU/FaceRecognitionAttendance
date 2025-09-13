@@ -1,34 +1,74 @@
 {% extends "base.html" %}
 
-{% block title %}Live Dashboard{% endblock %}
+{% block title %}Live Dashboard - Smart Attendance{% endblock %}
 
 {% block content %}
-<h1>Live Attendance Feed</h1>
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h1><i class="fas fa-tachometer-alt"></i> Live Attendance Dashboard</h1>
+        <p>Real-time monitoring of student attendance</p>
+    </div>
 
-<div class="stats-container">
-    <div class="stat-card">
-        <h3>Total Students</h3>
-        <p id="total-students-stat">--</p>
-    </div>
-    <div class="stat-card">
-        <h3>Present Today</h3>
-        <p id="present-today-stat">--</p>
-    </div>
-    <div class="stat-card">
-        <h3>Absent Today</h3>
-        <p id="absent-today-stat">--</p>
-    </div>
-</div>
+    <div class="stats-grid">
+        <div class="stat-card primary">
+            <div class="stat-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-content">
+                <h3>Total Students</h3>
+                <p id="total-students-stat">--</p>
+            </div>
+        </div>
 
-<div class="dashboard-layout">
-    <div class="video-container">
-        <img src="{{ url_for('dashboard_api.video_feed') }}" width="100%" alt="Live Feed">
+        <div class="stat-card success">
+            <div class="stat-icon">
+                <i class="fas fa-user-check"></i>
+            </div>
+            <div class="stat-content">
+                <h3>Present Today</h3>
+                <p id="present-today-stat">--</p>
+            </div>
+        </div>
+
+        <div class="stat-card warning">
+            <div class="stat-icon">
+                <i class="fas fa-user-times"></i>
+            </div>
+            <div class="stat-content">
+                <h3>Absent Today</h3>
+                <p id="absent-today-stat">--</p>
+            </div>
+        </div>
     </div>
-    <div class="attendance-container">
-        <h2>Today's Attendance</h2>
-        <a href="{{ url_for('dashboard_api.export_csv') }}" class="export-btn">Export as CSV</a>
-        <ul id="attendance-list">
-        </ul>
+
+    <div class="dashboard-content">
+        <div class="video-panel">
+            <div class="panel-header">
+                <h3><i class="fas fa-video"></i> Live Camera Feed</h3>
+            </div>
+            <div class="video-feed-container">
+                <img src="{{ url_for('dashboard_api.video_feed') }}" alt="Live Camera Feed">
+                <div class="live-indicator">
+                    <span class="pulse"></span>
+                    LIVE
+                </div>
+            </div>
+        </div>
+
+        <div class="attendance-panel">
+            <div class="panel-header">
+                <h3><i class="fas fa-clipboard-list"></i> Today's Attendance</h3>
+                <a href="{{ url_for('dashboard_api.export_csv') }}" class="export-btn">
+                    <i class="fas fa-download"></i> Export CSV
+                </a>
+            </div>
+
+            <div class="attendance-list-container">
+                <ul id="attendance-list">
+                    <li class="loading">Loading attendance data...</li>
+                </ul>
+            </div>
+        </div>
     </div>
 </div>
 
