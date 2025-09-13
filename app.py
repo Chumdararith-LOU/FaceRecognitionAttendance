@@ -9,6 +9,7 @@ from routes.dashboard import dashboard_bp
 from services.attendance_service import load_known_faces
 from flask_login import LoginManager
 from routes.auth import auth_bp
+from routes.admin import admin_bp
 
 migrate = Migrate()
 
@@ -30,6 +31,7 @@ def create_app(config_name='development'):
     # Register the view blueprint
     app.register_blueprint(view_bp)
     app.register_blueprint(dashboard_bp)
+    app.register_blueprint(admin_bp)
 
     # Initialize extensions
     db.init_app(app)

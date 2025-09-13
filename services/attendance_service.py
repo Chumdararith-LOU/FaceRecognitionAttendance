@@ -16,8 +16,8 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.dirname(BASE_DIR)
 # --- OpenVINO Model and App Configuration ---
 core = ov.Core()
-face_detection_model_xml = "intel/intel/face-detection-retail-0005/FP16/face-detection-retail-0005.xml"
-face_embedding_model_xml = "intel/intel/face-reidentification-retail-0095/FP16/face-reidentification-retail-0095.xml"
+face_detection_model_xml = os.path.join(PROJECT_ROOT, "intel/intel/face-detection-retail-0005/FP16/face-detection-retail-0005.xml")
+face_embedding_model_xml = os.path.join(PROJECT_ROOT, "intel/intel/face-reidentification-retail-0095/FP16/face-reidentification-retail-0095.xml")
 
 # Load models
 face_detection_model = core.read_model(model=face_detection_model_xml)
@@ -133,14 +133,27 @@ def get_face_embedding_from_image(image_file):
     """
     image_data = np.frombuffer(image_file.read(), np.uint8)
     frame = cv2.imdecode(image_data, cv2.IMREAD_COLOR)
+
+    # --- DEBUGGING STEP ---
+    if frame is not None:
+        cv2.imwrite("debug_registration_image.jpg", frame)
+        print("DEBUG: Saved the incoming registration image to debug_registration_image.jpg")
+    else:
+        print("DEBUG: CRITICAL ERROR - The uploaded image could not be decoded by OpenCV.")
+        return None, 0
+    # -------------------------
+
     original_h, original_w = frame.shape[:2]
 
     input_tensor = preprocess_frame(frame, detection_input_layer.shape)
     detection_results = compiled_face_detection_model([input_tensor])[detection_output_layer]
 
-    detections = [d for d in detection_results[0][0] if d[2] > 0.8]
+    # --- CONFIDENCE THRESHOLD ---
+    detections = [d for d in detection_results[0][0] if d[2] > 0.5]
+    print(f"DEBUG: Found {len(detections)} faces in the registration image.")
+
     if len(detections) != 1:
-        return None # Ensure only one face for registration
+        return None, len(detections)
 
     detection = detections[0]
     xmin = int(detection[3] * original_w)
@@ -149,9 +162,10 @@ def get_face_embedding_from_image(image_file):
     ymax = int(detection[6] * original_h)
     
     face_crop = frame[ymin:ymax, xmin:xmax]
-    if face_crop.size == 0: return None
+    if face_crop.size == 0: 
+        return None, 1
     
     embedding_tensor = preprocess_frame(face_crop, embedding_input_layer.shape)
     face_embedding = compiled_face_embedding_model([embedding_tensor])[embedding_output_layer][0]
     
-    return face_embedding
+    return face_embedding, 1

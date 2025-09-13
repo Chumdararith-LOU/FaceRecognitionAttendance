@@ -1,14 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <title>Live Attendance Dashboard</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
+{% block title %}Live Dashboard{% endblock %}
 
-<body>
-    <div class="container">
+{% block content %}
         <h1>Live Attendance Feed</h1>
         <div class="dashboard-layout">
             <div class="video-container">
@@ -23,6 +17,4 @@
         </div>
     </div>
     <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
-</body>
-
-</html>
+{% endblock %}

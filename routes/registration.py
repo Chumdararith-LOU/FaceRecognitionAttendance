@@ -30,10 +30,24 @@ def register_student():
         return jsonify({"error": f"Student with code {student_code} already exists"}), 409 # 409 Conflict
 
     # 3. --- Process Image and Get Embedding ---
-    embedding = get_face_embedding_from_image(image_file)
+    try:
+        embedding, num_faces = get_face_embedding_from_image(image_file)
+    except (TypeError, ValueError) as e:
+        # This will catch the "cannot unpack non-iterable NoneType object" error
+        # and any other potential unpacking errors.
+        print(f"ERROR: Could not unpack result from face embedding service: {e}")
+        embedding, num_faces = None, 0 # Set default failure values
+    except Exception as e:
+        # Catch any other unexpected errors from the service
+        print(f"ERROR: An unexpected exception occurred in face embedding service: {e}")
+        embedding, num_faces = None, 0 # Set default failure values
 
     if embedding is None:
-        return jsonify({"error": "Could not detect a single face in the image. Please try again."}), 400
+        if num_faces == 0:
+            error_message = "No face could be detected in the image. Please try again with better lighting."
+        else:
+            error_message = f"Found {num_faces} faces. Please provide a photo with only one face."
+        return jsonify({"error": error_message}), 400
 
     # 4. --- Create and Save New Student ---
     try:

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Panel{% endblock %}
+
+{% block content %}
+
+        <h1>Manual Attendance</h1>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message flash-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Student Name</th>
+                    <th>Student Code</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in students %}
+                <tr>
+                    <td>{{ student.full_name }}</td>
+                    <td>{{ student.student_code }}</td>
+                    <td>
+                        <form method="POST" action="{{ url_for('admin_api.manual_attendance') }}" style="margin: 0;">
+                            <input type="hidden" name="student_id" value="{{ student.id }}">
+                            <button type="submit" class="btn-small">Mark Present</button>
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="3">No students found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+{% endblock %}
