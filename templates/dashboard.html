@@ -16,6 +16,7 @@
             </div>
             <div class="attendance-container">
                 <h2>Today's Attendance</h2>
+                <a href="{{ url_for('dashboard_api.export_csv') }}" class="export-btn">Export as CSV</a>
                 <ul id="attendance-list">
                 </ul>
             </div>

@@ -8,6 +8,8 @@ from sqlalchemy import func
 from datetime import date
 from models.database import db
 from flask_login import login_required
+from utils.exporter import generate_attendance_csv
+from flask import make_response
 
 dashboard_bp = Blueprint('dashboard_api', __name__)
 
@@ -19,12 +21,14 @@ def generate_frames():
     camera = cv2.VideoCapture(0) # Use 0 for the default webcam
     if not camera.isOpened():
         raise RuntimeError("Could not start camera.")
-
+    frame_count = 0
     while True:
         success, frame = camera.read()
         if not success:
             break
-        else:
+
+        frame_count += 1
+        if frame_count % 5 == 0:
             # Process the frame (detect faces, etc.)
             processed_frame = recognize_and_log_attendance(frame)
 
@@ -79,3 +83,33 @@ def get_todays_attendance():
         print(f"!!! DATABASE ERROR in get_todays_attendance: {e}")
         # Return a proper JSON error response to the frontend
         return jsonify({"error": "An internal server error occurred."}), 500
+
+@dashboard_bp.route('/api/export/csv')
+@login_required
+def export_csv():
+    """
+    Generates and serves a CSV file of today's attendance records.
+    """
+    today = date.today()
+    
+    # This is the same query from our get_todays_attendance route
+    records = db.session.query(
+        Student.full_name,
+        func.max(AttendanceRecord.timestamp).label('last_seen')
+    ).join(Student, AttendanceRecord.student_id == Student.id)\
+     .filter(func.cast(AttendanceRecord.timestamp, db.Date) == today)\
+     .group_by(Student.id, Student.full_name)\
+     .order_by(func.max(AttendanceRecord.timestamp).desc())\
+     .all()
+    
+    csv_data = generate_attendance_csv(records)
+    
+    # Create a Flask response object
+    response = make_response(csv_data)
+    
+    # Set headers to trigger a file download
+    filename = f"attendance_{today.strftime('%Y-%m-%d')}.csv"
+    response.headers["Content-Disposition"] = f"attachment; filename={filename}"
+    response.headers["Content-Type"] = "text/csv"
+    
+    return response

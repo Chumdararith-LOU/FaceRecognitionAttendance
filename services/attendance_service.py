@@ -39,7 +39,7 @@ def recognize_and_log_attendance(frame):
     Recognizes faces, logs attendance with a cooldown, and draws on the frame.
     """
     from app import app
-    face_locations = face_recognition.face_locations(frame)
+    face_locations = face_recognition.face_locations(frame, model="cnn")
     face_encodings = face_recognition.face_encodings(frame, face_locations)
 
     current_time = datetime.now()
