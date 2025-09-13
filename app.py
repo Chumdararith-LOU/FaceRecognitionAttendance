@@ -9,6 +9,7 @@ from routes.dashboard import dashboard_bp
 from services.attendance_service import load_known_faces
 from flask_login import LoginManager
 from routes.auth import auth_bp
+from services.attendance_service import load_known_faces, initialize_models
 
 migrate = Migrate()
 
@@ -43,15 +44,16 @@ def create_app(config_name='development'):
     @app.route('/')
     def hello():
         return "Smart Attendance System is running!"
+    
+    with app.app_context():
+        print("Application context created. Loading known faces from the database...")
+        initialize_models()
+        load_known_faces()
 
     return app
 
 # Create the app instance for running
 app = create_app()
-
-with app.app_context():
-    print("Application context created. Loading known faces from the database...")
-    load_known_faces()
 
 if __name__ == '__main__':
     app.run(debug=True)

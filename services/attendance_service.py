@@ -5,6 +5,7 @@ import numpy as np
 from datetime import datetime, timedelta
 import openvino.runtime as ov
 from scipy.spatial.distance import cosine
+from flask import current_app
 
 # Import database models and session
 from models import Student, AttendanceRecord
@@ -16,22 +17,39 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.dirname(BASE_DIR)
 # --- OpenVINO Model and App Configuration ---
 core = ov.Core()
-face_detection_model_xml = "intel/intel/face-detection-retail-0005/FP16/face-detection-retail-0005.xml"
-face_embedding_model_xml = "intel/intel/face-reidentification-retail-0095/FP16/face-reidentification-retail-0095.xml"
 
-# Load models
-face_detection_model = core.read_model(model=face_detection_model_xml)
-face_embedding_model = core.read_model(model=face_embedding_model_xml)
+# Define model variables as None initially. They will be loaded by initialize_models().
+compiled_face_detection_model = None
+compiled_face_embedding_model = None
+detection_input_layer = None
+detection_output_layer = None
+embedding_input_layer = None
+embedding_output_layer = None
 
-# Compile models for the target device (e.g., CPU or GPU)
-compiled_face_detection_model = core.compile_model(model=face_detection_model, device_name="CPU")
-compiled_face_embedding_model = core.compile_model(model=face_embedding_model, device_name="CPU")
+def initialize_models():
+    """Loads and compiles models from paths specified in the app config."""
+    global compiled_face_detection_model, compiled_face_embedding_model
+    global detection_input_layer, detection_output_layer, embedding_input_layer, embedding_output_layer
+    
+    # Check if models are already loaded to prevent re-initialization
+    if compiled_face_detection_model is not None:
+        return
 
-# Get input and output nodes
-detection_input_layer = compiled_face_detection_model.input(0)
-detection_output_layer = compiled_face_detection_model.output(0)
-embedding_input_layer = compiled_face_embedding_model.input(0)
-embedding_output_layer = compiled_face_embedding_model.output(0)
+    print("Initializing OpenVINO models...")
+    face_detection_path = current_app.config['FACE_DETECTION_MODEL']
+    face_embedding_path = current_app.config['FACE_EMBEDDING_MODEL']
+    
+    face_detection_model = core.read_model(model=face_detection_path)
+    face_embedding_model = core.read_model(model=face_embedding_path)
+
+    compiled_face_detection_model = core.compile_model(model=face_detection_model, device_name="CPU")
+    compiled_face_embedding_model = core.compile_model(model=face_embedding_model, device_name="CPU")
+
+    detection_input_layer = compiled_face_detection_model.input(0)
+    detection_output_layer = compiled_face_detection_model.output(0)
+    embedding_input_layer = compiled_face_embedding_model.input(0)
+    embedding_output_layer = compiled_face_embedding_model.output(0)
+    print("OpenVINO models initialized successfully.")
 
 # In-memory cache for known faces
 known_face_encodings = []
@@ -44,12 +62,11 @@ RECOGNITION_THRESHOLD = 0.4 # Cosine distance threshold (lower is stricter)
 
 def load_known_faces():
     """Loads all student face embeddings from the database into memory."""
-    from app import app
     global known_face_encodings, known_face_metadata
     known_face_encodings.clear()
     known_face_metadata.clear()
 
-    with app.app_context():
+    with current_app.app_context():
         students = Student.query.filter(Student.face_embedding.isnot(None)).all()
         for student in students:
             known_face_encodings.append(student.get_embedding())
@@ -71,7 +88,7 @@ def recognize_and_log_attendance(frame):
     """
     Performs face detection and recognition using OpenVINO.
     """
-    from app import app
+    initialize_models()
     original_h, original_w = frame.shape[:2]
     
     # Preprocess and detect faces
@@ -109,7 +126,7 @@ def recognize_and_log_attendance(frame):
                     # --- ATTENDANCE LOGIC ---
                     last_seen_time = last_seen_students.get(student_id)
                     if last_seen_time is None or (current_time - last_seen_time) > ATTENDANCE_COOLDOWN:
-                        with app.app_context():
+                        with current_app.app_context():
                             try:
                                 new_record = AttendanceRecord(student_id=student_id)
                                 db.session.add(new_record)
@@ -131,16 +148,24 @@ def get_face_embedding_from_image(image_file):
     Finds a single face in an image and returns its OpenVINO embedding.
     This function is now used by the registration route.
     """
+    initialize_models()
+
     image_data = np.frombuffer(image_file.read(), np.uint8)
     frame = cv2.imdecode(image_data, cv2.IMREAD_COLOR)
+
+    if frame is None:
+        print("ERROR: The uploaded image could not be decoded by OpenCV.")
+        return None, 0
+    
     original_h, original_w = frame.shape[:2]
 
     input_tensor = preprocess_frame(frame, detection_input_layer.shape)
     detection_results = compiled_face_detection_model([input_tensor])[detection_output_layer]
 
-    detections = [d for d in detection_results[0][0] if d[2] > 0.8]
+    detections = [d for d in detection_results[0][0] if d[2] > 0.5]
+
     if len(detections) != 1:
-        return None # Ensure only one face for registration
+        return None, len(detections) # Ensure only one face for registration
 
     detection = detections[0]
     xmin = int(detection[3] * original_w)
@@ -149,9 +174,9 @@ def get_face_embedding_from_image(image_file):
     ymax = int(detection[6] * original_h)
     
     face_crop = frame[ymin:ymax, xmin:xmax]
-    if face_crop.size == 0: return None
+    if face_crop.size == 0: return None, 1
     
     embedding_tensor = preprocess_frame(face_crop, embedding_input_layer.shape)
     face_embedding = compiled_face_embedding_model([embedding_tensor])[embedding_output_layer][0]
     
-    return face_embedding
+    return face_embedding.flatten(), 1

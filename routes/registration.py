@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from models.database import db
 from models.student import Student
-from services.face_recognition import get_face_embedding_from_image
+from services.attendance_service import get_face_embedding_from_image
 
 # Create a Blueprint
 registration_bp = Blueprint('registration_api', __name__)
@@ -30,10 +30,23 @@ def register_student():
         return jsonify({"error": f"Student with code {student_code} already exists"}), 409 # 409 Conflict
 
     # 3. --- Process Image and Get Embedding ---
-    embedding = get_face_embedding_from_image(image_file)
+    try:
+        # --- THIS IS THE LINE TO FIX ---
+        # Unpack the returned tuple into two variables
+        embedding, num_faces = get_face_embedding_from_image(image_file)
+        # -------------------------------
+    except Exception as e:
+        # This will now correctly catch any errors from the service
+        print(f"ERROR: An exception occurred in face embedding service: {e}")
+        embedding, num_faces = None, 0 # Set default failure values
 
     if embedding is None:
-        return jsonify({"error": "Could not detect a single face in the image. Please try again."}), 400
+        if num_faces == 0:
+            error_message = "No face could be detected in the image. Please try again with better lighting."
+        else:
+            # This logic now works correctly because num_faces is an integer
+            error_message = f"Found {num_faces} faces. Please provide a photo with only one face."
+        return jsonify({"error": error_message}), 400
 
     # 4. --- Create and Save New Student ---
     try:
