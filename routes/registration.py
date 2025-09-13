@@ -1,8 +1,10 @@
+import logging
 from flask import Blueprint, request, jsonify
 from models.database import db
 from models.student import Student
 from services.attendance_service import get_face_embedding_from_image
 
+logger = logging.getLogger(__name__)
 # Create a Blueprint
 registration_bp = Blueprint('registration_api', __name__)
 
@@ -67,5 +69,5 @@ def register_student():
 
     except Exception as e:
         db.session.rollback()
-        print(f"Database error: {e}")
+        logger.error(f"Database error during registration for student {student_code}: {e}")
         return jsonify({"error": "An internal error occurred while saving the student."}), 500

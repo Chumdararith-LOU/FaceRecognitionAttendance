@@ -2,6 +2,7 @@
 import os
 import cv2
 import numpy as np
+import logging 
 from datetime import datetime, timedelta
 import openvino.runtime as ov
 from scipy.spatial.distance import cosine
@@ -10,6 +11,8 @@ from flask import current_app
 # Import database models and session
 from models import Student, AttendanceRecord
 from models.database import db
+
+logger = logging.getLogger(__name__)
 
 # Get the absolute path of the directory where this file is located 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -35,7 +38,7 @@ def initialize_models():
     if compiled_face_detection_model is not None:
         return
 
-    print("Initializing OpenVINO models...")
+    logger.info("Initializing OpenVINO models...")
     face_detection_path = current_app.config['FACE_DETECTION_MODEL']
     face_embedding_path = current_app.config['FACE_EMBEDDING_MODEL']
     
@@ -49,7 +52,7 @@ def initialize_models():
     detection_output_layer = compiled_face_detection_model.output(0)
     embedding_input_layer = compiled_face_embedding_model.input(0)
     embedding_output_layer = compiled_face_embedding_model.output(0)
-    print("OpenVINO models initialized successfully.")
+    logger.info("OpenVINO models initialized successfully.")
 
 # In-memory cache for known faces
 known_face_encodings = []
@@ -111,7 +114,9 @@ def recognize_and_log_attendance(frame):
 
             # Preprocess and get embedding for the cropped face
             embedding_tensor = preprocess_frame(face_crop, embedding_input_layer.shape)
-            face_embedding = compiled_face_embedding_model([embedding_tensor])[embedding_output_layer][0]
+            face_embedding_raw = compiled_face_embedding_model([embedding_tensor])[embedding_output_layer]
+            
+            face_embedding = face_embedding_raw.flatten()
             
             name = "Unknown"
             if known_face_encodings:
@@ -132,10 +137,10 @@ def recognize_and_log_attendance(frame):
                                 db.session.add(new_record)
                                 db.session.commit()
                                 last_seen_students[student_id] = current_time
-                                print(f"Logged attendance for {name} at {current_time}")
+                                logger.info(f"Logged attendance for {name} at {current_time}")
                             except Exception as e:
                                 db.session.rollback()
-                                print(f"Error logging attendance: {e}")
+                                logger.error(f"Error logging attendance for student_id {student_id}: {e}")
 
             # Draw bounding box and name
             cv2.rectangle(frame, (xmin, ymin), (xmax, ymax), (0, 255, 0), 2)
@@ -162,7 +167,7 @@ def get_face_embedding_from_image(image_file):
     input_tensor = preprocess_frame(frame, detection_input_layer.shape)
     detection_results = compiled_face_detection_model([input_tensor])[detection_output_layer]
 
-    detections = [d for d in detection_results[0][0] if d[2] > 0.5]
+    detections = [d for d in detection_results[0][0] if d[2] > 0.8]
 
     if len(detections) != 1:
         return None, len(detections) # Ensure only one face for registration

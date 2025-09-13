@@ -18,6 +18,8 @@ def generate_frames():
     Generator function to capture frames from the camera, process them,
     and yield them as a byte stream.
     """
+    from app import app
+
     camera = cv2.VideoCapture(0) # Use 0 for the default webcam
     if not camera.isOpened():
         raise RuntimeError("Could not start camera.")
@@ -30,7 +32,8 @@ def generate_frames():
         frame_count += 1
         if frame_count % 5 == 0:
             # Process the frame (detect faces, etc.)
-            processed_frame = recognize_and_log_attendance(frame)
+            with app.app_context():
+                processed_frame = recognize_and_log_attendance(frame)
 
             # Encode the frame in JPEG format
             ret, buffer = cv2.imencode('.jpg', processed_frame)

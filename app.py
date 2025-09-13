@@ -10,6 +10,7 @@ from flask_login import LoginManager
 from routes.auth import auth_bp
 from services.attendance_service import load_known_faces, initialize_models
 from extensions import db, migrate, limiter 
+from utils.logger import setup_logging
 
 def create_app(config_name='development'):
     """
@@ -29,6 +30,9 @@ def create_app(config_name='development'):
     # Register the view blueprint
     app.register_blueprint(view_bp)
     app.register_blueprint(dashboard_bp)
+
+    # --- INITIALIZE LOGGER ---
+    setup_logging(app)
 
     # Initialize extensions
     db.init_app(app)
