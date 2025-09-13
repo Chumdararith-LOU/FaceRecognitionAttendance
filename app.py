@@ -1,7 +1,6 @@
 from flask import Flask
 from flask_migrate import Migrate
 from config import config_by_name
-from models.database import db
 from models import Student, User, AttendanceRecord
 from routes.registration import registration_bp
 from routes.view_routes import view_bp
@@ -10,8 +9,7 @@ from services.attendance_service import load_known_faces
 from flask_login import LoginManager
 from routes.auth import auth_bp
 from services.attendance_service import load_known_faces, initialize_models
-
-migrate = Migrate()
+from extensions import db, migrate, limiter 
 
 def create_app(config_name='development'):
     """
@@ -35,6 +33,7 @@ def create_app(config_name='development'):
     # Initialize extensions
     db.init_app(app)
     migrate.init_app(app, db)
+    limiter.init_app(app)
 
     # Register the blueprint
     app.register_blueprint(registration_bp)
