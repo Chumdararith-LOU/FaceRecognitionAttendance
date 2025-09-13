@@ -1,4 +1,18 @@
 // In static/js/dashboard.js (create this new file)
+function updateDashboardStats() {
+    fetch('/api/dashboard/stats')
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                console.error('Error fetching stats:', data.error);
+                return;
+            }
+            document.getElementById('total-students-stat').textContent = data.total_students;
+            document.getElementById('present-today-stat').textContent = data.present_today;
+            document.getElementById('absent-today-stat').textContent = data.absent_today;
+        })
+        .catch(error => console.error('Failed to fetch dashboard stats:', error));
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     const attendanceList = document.getElementById('attendance-list');
@@ -35,8 +49,9 @@ document.addEventListener('DOMContentLoaded', () => {
             attendanceList.innerHTML = '<li class="error">Could not load data.</li>';
         }
     }
+    updateDashboardStats();
 
     // Fetch data immediately when the page loads, and then every 5 seconds
     fetchAndUpdateAttendance();
-    setInterval(fetchAndUpdateAttendance, 5000);
+    setInterval(fetchAndUpdateAttendance, 10000);
 });

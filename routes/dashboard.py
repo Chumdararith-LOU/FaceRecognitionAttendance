@@ -4,12 +4,14 @@ from flask import Blueprint, render_template, Response
 from services.attendance_service import recognize_and_log_attendance
 from flask import jsonify
 from models import AttendanceRecord, Student
-from sqlalchemy import func
+from sqlalchemy import func, distinct
 from datetime import date
 from models.database import db
 from flask_login import login_required
 from utils.exporter import generate_attendance_csv
 from flask import make_response
+
+
 
 dashboard_bp = Blueprint('dashboard_api', __name__)
 
@@ -116,3 +118,35 @@ def export_csv():
     response.headers["Content-Type"] = "text/csv"
     
     return response
+
+@dashboard_bp.route('/api/dashboard/stats', methods=['GET'])
+@login_required
+def get_dashboard_stats():
+    """
+    Provides key statistics for the dashboard.
+    """
+    try:
+        today = date.today()
+
+        # 1. Total registered students
+        total_students = db.session.query(Student).count()
+
+        # 2. Students present today (counting distinct students)
+        present_today_query = db.session.query(
+            func.count(distinct(AttendanceRecord.student_id))
+        ).filter(func.cast(AttendanceRecord.timestamp, db.Date) == today)
+        
+        present_count = present_today_query.scalar() or 0
+
+        # 3. Students absent today
+        absent_count = total_students - present_count
+
+        return jsonify({
+            "total_students": total_students,
+            "present_today": present_count,
+            "absent_today": absent_count
+        })
+
+    except Exception as e:
+        app.logger.error(f"Error fetching dashboard stats: {e}")
+        return jsonify({"error": "Internal server error"}), 500

@@ -11,6 +11,7 @@ from routes.auth import auth_bp
 from services.attendance_service import load_known_faces, initialize_models
 from extensions import db, migrate, limiter 
 from utils.logger import setup_logging
+from routes.admin import admin_bp
 
 def create_app(config_name='development'):
     """
@@ -42,6 +43,7 @@ def create_app(config_name='development'):
     # Register the blueprint
     app.register_blueprint(registration_bp)
     app.register_blueprint(auth_bp)
+    app.register_blueprint(admin_bp)
     
     #  A simple test route
     @app.route('/')

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Smart Attendance{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <div class="container">
+        <nav class="main-nav">
+            <a href="{{ url_for('dashboard_api.dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('views.registration_page') }}">Register Student</a>
+            <a href="{{ url_for('admin_api.manual_attendance') }}">Admin Panel</a>
+            <a href="{{ url_for('auth_api.logout') }}">Logout</a>
+        </nav>
+
+        <main>
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</body>
+
+</html>

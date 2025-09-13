@@ -1,28 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <title>Live Attendance Dashboard</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
+{% block title %}Live Dashboard{% endblock %}
 
-<body>
-    <div class="container">
-        <h1>Live Attendance Feed</h1>
-        <div class="dashboard-layout">
-            <div class="video-container">
-                <img src="{{ url_for('dashboard_api.video_feed') }}" width="640" alt="Live Feed">
-            </div>
-            <div class="attendance-container">
-                <h2>Today's Attendance</h2>
-                <a href="{{ url_for('dashboard_api.export_csv') }}" class="export-btn">Export as CSV</a>
-                <ul id="attendance-list">
-                </ul>
-            </div>
-        </div>
+{% block content %}
+<h1>Live Attendance Feed</h1>
+
+<div class="stats-container">
+    <div class="stat-card">
+        <h3>Total Students</h3>
+        <p id="total-students-stat">--</p>
     </div>
-    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
-</body>
+    <div class="stat-card">
+        <h3>Present Today</h3>
+        <p id="present-today-stat">--</p>
+    </div>
+    <div class="stat-card">
+        <h3>Absent Today</h3>
+        <p id="absent-today-stat">--</p>
+    </div>
+</div>
 
-</html>
+<div class="dashboard-layout">
+    <div class="video-container">
+        <img src="{{ url_for('dashboard_api.video_feed') }}" width="100%" alt="Live Feed">
+    </div>
+    <div class="attendance-container">
+        <h2>Today's Attendance</h2>
+        <a href="{{ url_for('dashboard_api.export_csv') }}" class="export-btn">Export as CSV</a>
+        <ul id="attendance-list">
+        </ul>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

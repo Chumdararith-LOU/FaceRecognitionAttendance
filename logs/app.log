@@ -2,3 +2,95 @@
 2025-09-13 13:20:23,794 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:37]
 2025-09-13 13:30:52,076 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:37]
 2025-09-13 13:35:05,240 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:37]
+2025-09-13 15:01:42,756 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:37]
+2025-09-13 15:18:17,153 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:37]
+2025-09-13 15:19:06,736 ERROR: Exception on /dashboard [GET] [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\flask_login\utils.py", line 290, in decorated_view
+    return current_app.ensure_sync(func)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\routes\dashboard.py", line 52, in dashboard
+    return render_template('dashboard.html')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\flask\templating.py", line 150, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\flask\templating.py", line 131, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\jinja2\environment.py", line 1295, in render
+    self.environment.handle_exception()
+  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\jinja2\environment.py", line 942, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\templates\dashboard.html", line 1, in top-level template code
+    {% extends "base.html" %}
+  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\templates\base.html", line 15, in top-level template code
+    <a href="{{ url_for('admin_api.manual_attendance') }}">Admin Panel</a>
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\flask\app.py", line 1121, in url_for
+    return self.handle_url_build_error(error, endpoint, values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\flask\app.py", line 1110, in url_for
+    rv = url_adapter.build(  # type: ignore[union-attr]
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\werkzeug\routing\map.py", line 924, in build
+    raise BuildError(endpoint, values, method, self)
+werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'admin_api.manual_attendance'. Did you mean 'dashboard_api.get_todays_attendance' instead?
+2025-09-13 15:19:36,032 ERROR: Exception on /dashboard [GET] [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\flask_login\utils.py", line 290, in decorated_view
+    return current_app.ensure_sync(func)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\routes\dashboard.py", line 52, in dashboard
+    return render_template('dashboard.html')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\flask\templating.py", line 150, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\flask\templating.py", line 131, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\jinja2\environment.py", line 1295, in render
+    self.environment.handle_exception()
+  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\jinja2\environment.py", line 942, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\templates\dashboard.html", line 1, in top-level template code
+    {% extends "base.html" %}
+  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\templates\base.html", line 15, in top-level template code
+    <a href="{{ url_for('admin_api.manual_attendance') }}">Admin Panel</a>
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\flask\app.py", line 1121, in url_for
+    return self.handle_url_build_error(error, endpoint, values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\flask\app.py", line 1110, in url_for
+    rv = url_adapter.build(  # type: ignore[union-attr]
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\werkzeug\routing\map.py", line 924, in build
+    raise BuildError(endpoint, values, method, self)
+werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'admin_api.manual_attendance'. Did you mean 'dashboard_api.get_todays_attendance' instead?
+2025-09-13 15:21:42,140 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:37]
+2025-09-13 15:24:28,258 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:37]

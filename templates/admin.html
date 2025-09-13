@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Panel{% endblock %}
+
+{% block content %}
+<h2>Admin Panel</h2>
+
+<div class="admin-section">
+    <h3>Manual Attendance Override</h3>
+    <p>Select a student from the list to mark them as present for today.</p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="flash-message flash-{{ category }}">{{ message }}</div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('admin_api.manual_attendance') }}" class="manual-attendance-form">
+        <select name="student_id" required>
+            <option value="" disabled selected>Select a student...</option>
+            {% for student in students %}
+            <option value="{{ student.id }}">{{ student.full_name }} ({{ student.student_code }})</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="btn">Mark Present</button>
+    </form>
+</div>
+
+<div class="admin-section">
+    <h3>Student Management</h3>
+    <table id="student-table">
+        <thead>
+            <tr>
+                <th>Student Code</th>
+                <th>Full Name</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in students %}
+            <tr id="student-row-{{ student.id }}">
+                <td>{{ student.student_code }}</td>
+                <td>{{ student.full_name }}</td>
+                <td>
+                    <button class="delete-btn" data-student-id="{{ student.id }}">Delete</button>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="3">No students registered yet.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}
