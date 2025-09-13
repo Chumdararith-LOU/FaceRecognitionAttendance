@@ -12,7 +12,7 @@ class Student(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     student_code = db.Column(db.String(20), unique=True, nullable=False, index=True)
     full_name = db.Column(db.String(120), nullable=False)
-    face_embedding = db.Column(VECTOR(128), nullable=True) # Will be nullable until registration is complete
+    face_embedding = db.Column(VECTOR(256), nullable=True) # Will be nullable until registration is complete
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     is_active = db.Column(db.Boolean, default=True, nullable=False)
 
