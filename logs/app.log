@@ -95,3 +95,4 @@ werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'admin_
 2025-09-13 15:21:42,140 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:37]
 2025-09-13 15:24:28,258 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:37]
 2025-09-13 15:45:55,850 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:37]
+2025-09-14 00:13:38,336 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:37]
