@@ -82,3 +82,4 @@ Traceback (most recent call last):
 werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'admin.manual_override'. Did you mean 'admin_api.delete_student' instead?
 2025-09-16 18:52:01,197 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:37]
 2025-09-16 19:00:41,998 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:37]
+2025-09-16 19:04:57,225 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:37]
