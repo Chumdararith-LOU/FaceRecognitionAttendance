@@ -8,7 +8,7 @@ load_dotenv()
 
 class Config:
     """Base configuration."""
-    SECRET_KEY = os.environ.get('SECRET_KEY')
+    SECRET_KEY = os.environ.get('SECRET_KEY') or 'a-hard-to-guess-string'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     FACE_DETECTION_MODEL = os.path.join(BASE_DIR, "intel/intel/face-detection-retail-0005/FP16/face-detection-retail-0005.xml")

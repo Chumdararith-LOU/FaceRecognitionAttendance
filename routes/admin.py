@@ -2,35 +2,55 @@ from flask import Blueprint, current_app, jsonify, render_template, request, red
 from flask_login import login_required
 from models import Student, AttendanceRecord
 from models.database import db
+from utils.decorators import admin_required
+import datetime
 
 admin_bp = Blueprint('admin_api', __name__)
 
-@admin_bp.route('/admin', methods=['GET', 'POST'])
+@admin_bp.route('/admin/dashboard', methods=['GET', 'POST'])
 @login_required
-def manual_attendance():
+@admin_required
+def admin_dashboard():
+    """
+    Handles the admin dashboard, which includes manually marking attendance 
+    and viewing student and attendance data.
+    """
     if request.method == 'POST':
         student_id = request.form.get('student_id')
-        if student_id:
-            try:
-                # Check if student exists
-                student = Student.query.get(student_id)
-                if student:
-                    # Add a new attendance record for this student
-                    new_record = AttendanceRecord(student_id=student.id)
-                    db.session.add(new_record)
-                    db.session.commit()
-                    flash(f"Successfully marked {student.full_name} as present.", "success")
-                else:
-                    flash("Student not found.", "error")
-            except Exception as e:
-                db.session.rollback()
-                flash(f"An error occurred: {e}", "error")
         
-        return redirect(url_for('admin_api.manual_attendance'))
+        if not student_id:
+            flash("No student selected.", "warning")
+            return redirect(url_for('admin_api.admin_dashboard'))
 
-    # For GET requests, display the list of all students
+        try:
+            student = Student.query.get(student_id)
+            if student:
+                # Create a new attendance record for this student
+                new_record = AttendanceRecord(student_id=student.id, timestamp=datetime.datetime.utcnow())
+                db.session.add(new_record)
+                db.session.commit()
+                flash(f"Successfully marked {student.full_name} as present.", "success")
+            else:
+                flash("Student not found.", "error")
+        except Exception as e:
+            db.session.rollback()
+            current_app.logger.error(f"Error in manual attendance: {e}")
+            flash(f"An error occurred while marking attendance.", "error")
+        
+        return redirect(url_for('admin_api.admin_dashboard'))
+
+    # For GET requests, fetch data for the dashboard
     students = Student.query.order_by(Student.full_name).all()
-    return render_template('admin.html', students=students)
+    
+    # Fetch the 15 most recent attendance records to display on the dashboard
+    recent_records = db.session.query(
+        AttendanceRecord.timestamp,
+        Student.full_name
+    ).join(Student, AttendanceRecord.student_id == Student.id).order_by(
+        AttendanceRecord.timestamp.desc()
+    ).limit(15).all()
+
+    return render_template('admin.html', students=students, recent_records=recent_records)
 
 @admin_bp.route('/api/students/<int:student_id>', methods=['DELETE'])
 @login_required

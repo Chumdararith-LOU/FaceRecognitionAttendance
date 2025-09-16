@@ -1,5 +1,3 @@
-// In static/js/camera.js
-
 document.addEventListener('DOMContentLoaded', () => {
     // Get references to all the HTML elements we'll need
     const video = document.getElementById('camera-feed');
@@ -11,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function startCamera() {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ 
-                video: { width: 300, height: 375 } 
+                video: { width: 500, height: 375 } 
             });
             video.srcObject = stream;
         } catch (err) {
@@ -29,6 +27,15 @@ document.addEventListener('DOMContentLoaded', () => {
         statusMessage.textContent = 'Processing...';
         statusMessage.style.color = 'blue';
 
+        // Get CSRF token from meta tag
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+        if (!csrfToken) {
+            console.error('CSRF token not found');
+            statusMessage.textContent = 'Security error. Please refresh the page and try again.';
+            statusMessage.style.color = 'red';
+            return;
+        }
+
         // a. Capture a photo from the video feed
         const context = canvas.getContext('2d');
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
@@ -45,22 +52,34 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const response = await fetch('/api/register', {
                     method: 'POST',
-                    body: formData // No headers needed, browser sets it for FormData
+                    headers: {
+                        'X-CSRFToken': csrfToken
+                    },
+                    body: formData
                 });
 
-                const result = await response.json();
+                // Handle both JSON and non-JSON responses
+                const contentType = response.headers.get('content-type');
+                let result;
+                
+                if (contentType && contentType.includes('application/json')) {
+                    result = await response.json();
+                } else {
+                    const text = await response.text();
+                    throw new Error(text || 'Server returned non-JSON response');
+                }
 
                 if (response.ok) {
                     statusMessage.textContent = `Success! ${result.message}`;
                     statusMessage.style.color = 'green';
                     studentForm.reset(); // Clear the form
                 } else {
-                    statusMessage.textContent = `Error: ${result.error}`;
+                    statusMessage.textContent = `Error: ${result.error || 'Unknown error occurred'}`;
                     statusMessage.style.color = 'red';
                 }
             } catch (error) {
                 console.error('Error submitting form:', error);
-                statusMessage.textContent = 'A network error occurred. Please try again.';
+                statusMessage.textContent = `Error: ${error.message || 'A network error occurred. Please try again.'}`;
                 statusMessage.style.color = 'red';
             }
         }, 'image/jpeg');

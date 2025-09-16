@@ -24,7 +24,8 @@
         </div>
 
         <div class="form-section">
-            <form id="student-form" class="styled-form">
+            <form id="student-form" class="styled-form" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
                 <div class="form-header">
                     <h3>Student Information</h3>
                 </div>
