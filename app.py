@@ -5,11 +5,9 @@ from models import Student, User, AttendanceRecord
 from routes.registration import registration_bp
 from routes.view_routes import view_bp
 from routes.dashboard import dashboard_bp
-from services.attendance_service import load_known_faces
-from flask_login import LoginManager
 from routes.auth import auth_bp
 from services.attendance_service import load_known_faces, initialize_models
-from extensions import db, migrate, limiter 
+from extensions import db, migrate, limiter, csrf, login_manager, bcrypt
 from utils.logger import setup_logging
 from routes.admin import admin_bp
 
@@ -19,10 +17,6 @@ def create_app(config_name='development'):
     """
     app = Flask(__name__)
     app.config.from_object(config_by_name[config_name])
-
-    login_manager = LoginManager()
-    login_manager.init_app(app)
-    login_manager.login_view = 'auth_api.login' # type: ignore
 
     @login_manager.user_loader
     def load_user(user_id):
@@ -39,21 +33,22 @@ def create_app(config_name='development'):
     db.init_app(app)
     migrate.init_app(app, db)
     limiter.init_app(app)
+    csrf.init_app(app)
+    bcrypt.init_app(app)
+    login_manager.init_app(app)
+    login_manager.login_view = 'auth_api.login'
+    login_manager.login_message_category = 'info'
 
     # Register the blueprint
     app.register_blueprint(registration_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(admin_bp)
     
-    #  A simple test route
-    @app.route('/')
-    def hello():
-        return "Smart Attendance System is running!"
-    
-    with app.app_context():
-        print("Application context created. Loading known faces from the database...")
-        initialize_models()
-        load_known_faces()
+
+    # with app.app_context():
+    #     print("Application context created. Loading known faces from the database...")
+    #     initialize_models()
+    #     load_known_faces()
 
     return app
 

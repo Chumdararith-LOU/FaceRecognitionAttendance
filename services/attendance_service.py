@@ -38,21 +38,31 @@ def initialize_models():
     if compiled_face_detection_model is not None:
         return
 
-    logger.info("Initializing OpenVINO models...")
-    face_detection_path = current_app.config['FACE_DETECTION_MODEL']
-    face_embedding_path = current_app.config['FACE_EMBEDDING_MODEL']
-    
-    face_detection_model = core.read_model(model=face_detection_path)
-    face_embedding_model = core.read_model(model=face_embedding_path)
+    try:
+        # Read model paths directly from the Flask app's configuration
+        detection_model_path = current_app.config['FACE_DETECTION_MODEL']
+        embedding_model_path = current_app.config['FACE_EMBEDDING_MODEL']
+        
+        logger.info(f"Loading detection model from: {detection_model_path}")
+        face_detection_model = core.read_model(model=detection_model_path)
+        compiled_face_detection_model = core.compile_model(model=face_detection_model, device_name="CPU")
+        
+        # Get input and output layers for detection model
+        detection_input_layer = compiled_face_detection_model.input(0)
+        detection_output_layer = compiled_face_detection_model.output(0)
 
-    compiled_face_detection_model = core.compile_model(model=face_detection_model, device_name="CPU")
-    compiled_face_embedding_model = core.compile_model(model=face_embedding_model, device_name="CPU")
+        logger.info(f"Loading embedding model from: {embedding_model_path}")
+        face_embedding_model = core.read_model(model=embedding_model_path)
+        compiled_face_embedding_model = core.compile_model(model=face_embedding_model, device_name="CPU")
 
-    detection_input_layer = compiled_face_detection_model.input(0)
-    detection_output_layer = compiled_face_detection_model.output(0)
-    embedding_input_layer = compiled_face_embedding_model.input(0)
-    embedding_output_layer = compiled_face_embedding_model.output(0)
-    logger.info("OpenVINO models initialized successfully.")
+        # Get input and output layers for embedding model
+        embedding_input_layer = compiled_face_embedding_model.input(0)
+        embedding_output_layer = compiled_face_embedding_model.output(0)
+        
+        logger.info("OpenVINO models initialized successfully.")
+
+    except Exception as e:
+        logger.error(f"Failed to initialize OpenVINO models: {e}")
 
 # In-memory cache for known faces
 known_face_encodings = []
