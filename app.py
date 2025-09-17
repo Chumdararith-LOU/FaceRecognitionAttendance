@@ -45,10 +45,10 @@ def create_app(config_name='development'):
     app.register_blueprint(admin_bp)
     
 
-    # with app.app_context():
-    #     print("Application context created. Loading known faces from the database...")
-    #     initialize_models()
-    #     load_known_faces()
+    with app.app_context():
+        print("Application context created. Loading known faces from the database...")
+        initialize_models()
+        load_known_faces()
 
     return app
 

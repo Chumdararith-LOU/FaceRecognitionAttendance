@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- 2. HANDLE FORM SUBMISSION ---
-    studentForm.addEventListener('submit', async (event) => {
+    studentForm.addEventListener('submit', (event) => {
         // Stop the default browser form submission
         event.preventDefault(); 
         
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
         
         // b. Convert the captured image on the canvas to a file (Blob)
-        canvas.toBlob(async (blob) => {
+        canvas.toBlob((blob) => {
             // c. Create a FormData object to send to the backend
             const formData = new FormData();
             formData.append('full_name', document.getElementById('full_name').value);
@@ -49,42 +49,42 @@ document.addEventListener('DOMContentLoaded', () => {
             formData.append('image', blob, 'registration_photo.jpg');
 
             // d. Send the data to the /api/register endpoint
-            try {
-                const response = await fetch('/api/register', {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRFToken': csrfToken
-                    },
-                    body: formData
-                });
-
-                // Handle both JSON and non-JSON responses
-                const contentType = response.headers.get('content-type');
-                let result;
+            fetch('/api/register', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken
+                },
+                body: formData
+            })
+            .then(response => {
+                // Check if the response is successful, if not, parse the error JSON
+                if (!response.ok) {
+                    return response.json().then(errorData => {
+                        throw new Error(errorData.error || 'An unknown error occurred.');
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data);
+                statusMessage.textContent = `Success! ${data.message || 'Student registered successfully!'}`;
+                statusMessage.style.color = 'green';
+                studentForm.reset(); // Clear the form
                 
-                if (contentType && contentType.includes('application/json')) {
-                    result = await response.json();
-                } else {
-                    const text = await response.text();
-                    throw new Error(text || 'Server returned non-JSON response');
-                }
-
-                if (response.ok) {
-                    statusMessage.textContent = `Success! ${result.message}`;
-                    statusMessage.style.color = 'green';
-                    studentForm.reset(); // Clear the form
-                } else {
-                    statusMessage.textContent = `Error: ${result.error || 'Unknown error occurred'}`;
-                    statusMessage.style.color = 'red';
-                }
-            } catch (error) {
-                console.error('Error submitting form:', error);
-                statusMessage.textContent = `Error: ${error.message || 'A network error occurred. Please try again.'}`;
+                // Optional: Show success alert and reload
+                alert('Student registered successfully!');
+                window.location.reload();
+            })
+            .catch(error => {
+                console.error('Error submitting form:', error.message);
+                statusMessage.textContent = `Error: ${error.message || 'Registration failed'}`;
                 statusMessage.style.color = 'red';
-            }
+                
+                // Display the specific error message from the server
+                alert(`Registration Failed: ${error.message}`);
+            });
         }, 'image/jpeg');
     });
 
-    // Start the camera as soon as the page loads
     startCamera();
 });

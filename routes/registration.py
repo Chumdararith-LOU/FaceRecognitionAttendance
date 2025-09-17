@@ -2,7 +2,7 @@ import logging
 from flask import Blueprint, request, jsonify
 from models.database import db
 from models.student import Student
-from services.attendance_service import get_face_embedding_from_image
+from services.attendance_service import get_face_embedding_from_image, load_known_faces
 
 logger = logging.getLogger(__name__)
 # Create a Blueprint
@@ -10,64 +10,52 @@ registration_bp = Blueprint('registration_api', __name__)
 
 @registration_bp.route('/api/register', methods=['POST'])
 def register_student():
-    """
-    Handles student registration. Expects multipart/form-data with:
-    - student_code (string)
-    - full_name (string)
-    - image (file)
-    """
     # 1. --- Validate Input ---
-    if 'image' not in request.files:
-        return jsonify({"error": "No image file provided"}), 400
+    if 'face_image' not in request.files:
+        return jsonify({"error": "No image file provided."}), 400
 
-    image_file = request.files['image']
+    image_file = request.files['face_image']
     student_code = request.form.get('student_code')
     full_name = request.form.get('full_name')
 
     if not all([student_code, full_name, image_file]):
-        return jsonify({"error": "Missing required fields: student_code, full_name, or image"}), 400
+        return jsonify({"error": "Missing form data. Please fill out all fields."}), 400
 
     # 2. --- Check for Existing Student ---
     if Student.query.filter_by(student_code=student_code).first():
-        return jsonify({"error": f"Student with code {student_code} already exists"}), 409 # 409 Conflict
+        return jsonify({"error": f"A student with ID {student_code} already exists"}), 409 # 409 Conflict
 
     # 3. --- Process Image and Get Embedding ---
     try:
-        # --- THIS IS THE LINE TO FIX ---
-        # Unpack the returned tuple into two variables
+        # Get embedding and check for face detection errors
         embedding, num_faces = get_face_embedding_from_image(image_file)
-        # -------------------------------
-    except Exception as e:
-        # This will now correctly catch any errors from the service
-        print(f"ERROR: An exception occurred in face embedding service: {e}")
-        embedding, num_faces = None, 0 # Set default failure values
 
-    if embedding is None:
-        if num_faces == 0:
-            error_message = "No face could be detected in the image. Please try again with better lighting."
-        else:
-            # This logic now works correctly because num_faces is an integer
-            error_message = f"Found {num_faces} faces. Please provide a photo with only one face."
-        return jsonify({"error": error_message}), 400
-
-    # 4. --- Create and Save New Student ---
-    try:
+        if embedding is None:
+            if num_faces == 0:
+                error_message = "No face could be detected. Please use a clear, forward-facing photo."
+            else:
+                error_message = f"Multiple ({num_faces}) faces were detected. Please upload an image with only one person."
+            return jsonify({"error": error_message}), 400
+        
+        # Create and save the new student
         new_student = Student(
-            student_code=student_code,
-            full_name=full_name
+            student_code=student_code, # type: ignore
+            full_name=full_name, # type: ignore
         )
         new_student.set_embedding(embedding)
-        
         db.session.add(new_student)
         db.session.commit()
+        
+        # Reload known faces in memory to include the new student
+        load_known_faces()
 
+        logger.info(f"Successfully registered new student: {full_name} ({student_code})")
         return jsonify({
-            "message": "Student registered successfully",
-            "student_id": new_student.id,
-            "student_code": new_student.student_code
+            "message": "Student registered successfully!",
+            "student": {"full_name": full_name, "student_code": student_code}
         }), 201 # 201 Created
 
     except Exception as e:
         db.session.rollback()
         logger.error(f"Database error during registration for student {student_code}: {e}")
-        return jsonify({"error": "An internal error occurred while saving the student."}), 500
+        return jsonify({"error": "An unexpected error occurred on the server."}), 500
