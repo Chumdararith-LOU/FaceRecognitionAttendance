@@ -7,7 +7,7 @@ from flask_limiter.util import get_remote_address
 from flask_wtf.csrf import CSRFProtect
 from flask_bcrypt import Bcrypt  # Add this import
 from flask_login import LoginManager # Add this import
-
+from flask_socketio import SocketIO
 
 # Initialize extensions here
 csrf = CSRFProtect()
@@ -15,6 +15,7 @@ db = SQLAlchemy()
 migrate = Migrate()
 bcrypt = Bcrypt() # Add bcrypt initialization
 login_manager = LoginManager() # Add login_manager initialization
+socketio = SocketIO()
 
 limiter = Limiter(
     key_func=get_remote_address,

@@ -14,6 +14,8 @@ class Config:
     FACE_DETECTION_MODEL = os.path.join(BASE_DIR, "intel/intel/face-detection-retail-0005/FP16/face-detection-retail-0005.xml")
     FACE_EMBEDDING_MODEL = os.path.join(BASE_DIR, "intel/intel/face-reidentification-retail-0095/FP16/face-reidentification-retail-0095.xml")
 
+    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+
 class DevelopmentConfig(Config):
     """Development configuration."""
     DEBUG = True

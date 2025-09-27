@@ -1,101 +1,218 @@
-2025-09-16 18:44:16,540 ERROR: Exception on / [GET] [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\flask\app.py:875]
+2025-09-17 18:33:00,953 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:37]
+2025-09-17 18:53:04,107 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:33]
+2025-09-17 18:54:22,566 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:33]
+2025-09-24 22:49:26,295 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:33]
+2025-09-24 22:49:33,146 ERROR: Exception on / [GET] [in C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\flask\app.py:875]
 Traceback (most recent call last):
-  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+  File "C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
     response = self.full_dispatch_request()
                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+  File "C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
     rv = self.handle_user_exception(e)
          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+  File "C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
     rv = self.dispatch_request()
          ^^^^^^^^^^^^^^^^^^^^^^^
-  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+  File "C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
     return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\routes\view_routes.py", line 8, in registration_page
     return render_template('index.html')
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\flask\templating.py", line 150, in render_template
+  File "C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\flask\templating.py", line 150, in render_template
     return _render(app, template, context)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\flask\templating.py", line 131, in _render
+  File "C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\flask\templating.py", line 131, in _render
     rv = template.render(context)
          ^^^^^^^^^^^^^^^^^^^^^^^^
-  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\jinja2\environment.py", line 1295, in render
+  File "C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\jinja2\environment.py", line 1295, in render
     self.environment.handle_exception()
-  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\jinja2\environment.py", line 942, in handle_exception
+  File "C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\jinja2\environment.py", line 942, in handle_exception
     raise rewrite_traceback_stack(source=source)
   File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\templates\index.html", line 1, in top-level template code
     {% extends "base.html" %}
-  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\templates\base.html", line 27, in top-level template code
-    <a href="{{ url_for('admin.manual_override') }}" class="nav-link">
+  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\templates\base.html", line 22, in top-level template code
+    <a href="{{ url_for('dashboard_api.dashboard') }}" class="nav-link">
     ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\flask\app.py", line 1121, in url_for
+  File "C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\flask\app.py", line 1121, in url_for
     return self.handle_url_build_error(error, endpoint, values)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\flask\app.py", line 1110, in url_for
+  File "C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\flask\app.py", line 1110, in url_for
     rv = url_adapter.build(  # type: ignore[union-attr]
          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\werkzeug\routing\map.py", line 924, in build
+  File "C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\werkzeug\routing\map.py", line 924, in build
     raise BuildError(endpoint, values, method, self)
-werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'admin.manual_override'. Did you mean 'admin_api.delete_student' instead?
-2025-09-16 18:51:53,339 ERROR: Exception on / [GET] [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\flask\app.py:875]
+werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'dashboard_api.dashboard'. Did you mean 'dashboard.dashboard' instead?
+2025-09-24 22:54:28,143 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:33]
+2025-09-24 23:07:51,483 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:33]
+2025-09-24 23:07:54,990 ERROR: Exception on /video_feed [GET] [in C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\flask\app.py:875]
 Traceback (most recent call last):
-  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+  File "C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
     response = self.full_dispatch_request()
                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+  File "C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
     rv = self.handle_user_exception(e)
          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+  File "C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
     rv = self.dispatch_request()
          ^^^^^^^^^^^^^^^^^^^^^^^
-  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+  File "C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
     return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\routes\view_routes.py", line 8, in registration_page
-    return render_template('index.html')
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\flask\templating.py", line 150, in render_template
+  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\routes\dashboard.py", line 58, in video_feed
+    return Response(generate_frames(app),
+                    ^^^^^^^^^^^^^^^^^^^^
+TypeError: generate_frames() takes 0 positional arguments but 1 was given
+2025-09-24 23:08:07,232 ERROR: Exception on /video_feed [GET] [in C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\routes\dashboard.py", line 58, in video_feed
+    return Response(generate_frames(app),
+                    ^^^^^^^^^^^^^^^^^^^^
+TypeError: generate_frames() takes 0 positional arguments but 1 was given
+2025-09-24 23:08:11,231 ERROR: Exception on /video_feed [GET] [in C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\routes\dashboard.py", line 58, in video_feed
+    return Response(generate_frames(app),
+                    ^^^^^^^^^^^^^^^^^^^^
+TypeError: generate_frames() takes 0 positional arguments but 1 was given
+2025-09-24 23:10:04,617 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:33]
+2025-09-24 23:20:35,209 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:33]
+2025-09-24 23:21:06,546 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:33]
+2025-09-24 23:21:53,557 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:33]
+2025-09-24 23:50:30,693 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:33]
+2025-09-24 23:53:18,805 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:33]
+2025-09-25 00:06:04,491 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:33]
+2025-09-25 00:15:43,307 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:33]
+2025-09-25 00:45:37,541 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:33]
+2025-09-25 00:57:00,650 ERROR: Exception on /admin/dashboard [GET] [in C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\flask_login\utils.py", line 290, in decorated_view
+    return current_app.ensure_sync(func)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\decorators.py", line 10, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\routes\admin.py", line 55, in admin_dashboard
+    return render_template('admin.html', students=students, recent_records=recent_records)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\flask\templating.py", line 150, in render_template
     return _render(app, template, context)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\flask\templating.py", line 131, in _render
+  File "C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\flask\templating.py", line 131, in _render
     rv = template.render(context)
          ^^^^^^^^^^^^^^^^^^^^^^^^
-  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\jinja2\environment.py", line 1295, in render
+  File "C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\jinja2\environment.py", line 1295, in render
     self.environment.handle_exception()
-  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\jinja2\environment.py", line 942, in handle_exception
+  File "C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\jinja2\environment.py", line 942, in handle_exception
     raise rewrite_traceback_stack(source=source)
-  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\templates\index.html", line 1, in top-level template code
+  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\templates\admin.html", line 1, in top-level template code
     {% extends "base.html" %}
-  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\templates\base.html", line 27, in top-level template code
-    <a href="{{ url_for('admin_api.admin_dashboard') }}" class="nav-link">
+  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\templates\base.html", line 40, in top-level template code
+    {% block content %}{% endblock %}
     ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\flask\app.py", line 1121, in url_for
-    return self.handle_url_build_error(error, endpoint, values)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\flask\app.py", line 1110, in url_for
-    rv = url_adapter.build(  # type: ignore[union-attr]
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\venv\Lib\site-packages\werkzeug\routing\map.py", line 924, in build
-    raise BuildError(endpoint, values, method, self)
-werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'admin.manual_override'. Did you mean 'admin_api.delete_student' instead?
-2025-09-16 18:52:01,197 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:37]
-2025-09-16 19:00:41,998 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:37]
-2025-09-16 19:04:57,225 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:37]
-2025-09-17 16:43:36,973 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:37]
-2025-09-17 16:53:09,790 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:37]
-2025-09-17 16:55:47,680 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:37]
-2025-09-17 16:56:14,450 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:37]
-2025-09-17 17:13:05,562 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:37]
-2025-09-17 17:13:17,155 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:37]
-2025-09-17 17:14:32,658 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:37]
-2025-09-17 17:16:13,470 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:37]
-2025-09-17 17:20:09,443 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:37]
-2025-09-17 17:23:10,790 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:37]
-2025-09-17 17:26:21,761 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:37]
-2025-09-17 17:49:54,791 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:37]
-2025-09-17 17:49:56,175 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:37]
-2025-09-17 17:51:57,040 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:37]
-2025-09-17 17:53:40,717 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:37]
-2025-09-17 17:55:22,020 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:37]
+  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\templates\admin.html", line 33, in block 'content'
+    <td>{{ student.registration_date.strftime('%Y-%m-%d %H:%M') }}</td>
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\jinja2\environment.py", line 490, in getattr
+    return getattr(obj, attribute)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+jinja2.exceptions.UndefinedError: 'models.student.Student object' has no attribute 'registration_date'
+2025-09-25 00:57:13,524 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:33]
+2025-09-25 00:59:18,559 ERROR: Exception on /admin/dashboard [GET] [in C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\flask\app.py:875]
+Traceback (most recent call last):
+  File "C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\flask_login\utils.py", line 290, in decorated_view
+    return current_app.ensure_sync(func)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\decorators.py", line 10, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\routes\admin.py", line 55, in admin_dashboard
+    return render_template('admin.html', students=students, recent_records=recent_records)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\flask\templating.py", line 150, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\flask\templating.py", line 131, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\jinja2\environment.py", line 1295, in render
+    self.environment.handle_exception()
+  File "C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\jinja2\environment.py", line 942, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\templates\admin.html", line 1, in top-level template code
+    {% extends "base.html" %}
+  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\templates\base.html", line 40, in top-level template code
+    {% block content %}{% endblock %}
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\templates\admin.html", line 33, in block 'content'
+    <td>{{ student.registration_date.strftime('%Y-%m-%d %H:%M') }}</td>
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\anaconda3\envs\myenv\Lib\site-packages\jinja2\environment.py", line 490, in getattr
+    return getattr(obj, attribute)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+jinja2.exceptions.UndefinedError: 'models.student.Student object' has no attribute 'registration_date'
+2025-09-25 01:04:19,971 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:33]
+2025-09-25 01:06:10,048 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:33]
+2025-09-25 01:08:35,289 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:33]
+2025-09-25 01:10:43,184 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:33]
+2025-09-25 01:10:56,874 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:33]
+2025-09-25 01:12:44,511 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:33]
+2025-09-25 01:20:11,416 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:33]
+2025-09-25 01:25:57,497 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:33]
+2025-09-25 01:27:30,294 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:33]
+2025-09-27 09:38:31,458 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:33]
+2025-09-27 09:45:00,049 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:33]
+2025-09-27 09:50:28,887 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:33]
+2025-09-27 09:57:09,002 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:33]
+2025-09-27 10:04:44,341 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:33]
+2025-09-27 10:07:14,412 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:33]
+2025-09-27 10:12:16,016 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:33]
+2025-09-27 10:14:32,560 INFO: Smart Attendance System startup [in D:\ITC6\Machine Learning\SmartAttendance\FaceRecognitionAttendance\utils\logger.py:33]

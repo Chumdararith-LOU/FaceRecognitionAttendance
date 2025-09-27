@@ -1,12 +1,16 @@
 import logging
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, current_app
 from models.database import db
 from models.student import Student
-from services.attendance_service import get_face_embedding_from_image, load_known_faces
+from services.attendance_service import get_face_embedding_from_image, add_student_to_known_faces
 
 logger = logging.getLogger(__name__)
-# Create a Blueprint
 registration_bp = Blueprint('registration_api', __name__)
+
+def allowed_file(filename):
+    """Checks if the file's extension is allowed."""
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in current_app.config['ALLOWED_EXTENSIONS']
 
 @registration_bp.route('/api/register', methods=['POST'])
 def register_student():
@@ -20,6 +24,9 @@ def register_student():
 
     if not all([student_code, full_name, image_file]):
         return jsonify({"error": "Missing form data. Please fill out all fields."}), 400
+    
+    if not allowed_file(image_file.filename):
+        return jsonify({"error": "Invalid image format. Please use PNG, JPG, or JPEG."}), 400
 
     # 2. --- Check for Existing Student ---
     if Student.query.filter_by(student_code=student_code).first():
@@ -47,7 +54,7 @@ def register_student():
         db.session.commit()
         
         # Reload known faces in memory to include the new student
-        load_known_faces()
+        add_student_to_known_faces(new_student)
 
         logger.info(f"Successfully registered new student: {full_name} ({student_code})")
         return jsonify({

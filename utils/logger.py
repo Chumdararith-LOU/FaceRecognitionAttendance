@@ -1,22 +1,18 @@
-# In utils/logger.py
-
 import logging
-from logging.handlers import RotatingFileHandler
 import os
+from flask import has_request_context, request
 
 def setup_logging(app):
     """Configures the application logger."""
     
     # Ensure the log directory exists
-    if not os.path.exists('logs'):
-        os.mkdir('logs')
+    log_dir = app.config.get('LOG_DIR', 'logs')
+    if not os.path.exists(log_dir):
+        os.makedirs(log_dir)
 
-    # Create a rotating file handler to limit log file size
-    file_handler = RotatingFileHandler(
-        'logs/app.log', 
-        maxBytes=10240,  # 10 KB per file
-        backupCount=10   # Keep 10 old log files
-    )
+    # Create a standard file handler (not rotating) to avoid permission issues
+    log_file = os.path.join(log_dir, 'app.log')
+    file_handler = logging.FileHandler(log_file)
     
     # Set the format for the log messages
     formatter = logging.Formatter(
