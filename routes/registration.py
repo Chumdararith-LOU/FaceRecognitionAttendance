@@ -15,14 +15,16 @@ def allowed_file(filename):
 @registration_bp.route('/api/register', methods=['POST'])
 def register_student():
     # 1. --- Validate Input ---
-    if 'face_image' not in request.files:
+    if 'image' not in request.files:
         return jsonify({"error": "No image file provided."}), 400
 
-    image_file = request.files['face_image']
+    image_file = request.files['image']
     student_code = request.form.get('student_code')
     full_name = request.form.get('full_name')
+    department = request.form.get('department')  
 
-    if not all([student_code, full_name, image_file]):
+    # Update the validation check to include department
+    if not all([student_code, full_name, department, image_file]): 
         return jsonify({"error": "Missing form data. Please fill out all fields."}), 400
     
     if not allowed_file(image_file.filename):
@@ -30,7 +32,7 @@ def register_student():
 
     # 2. --- Check for Existing Student ---
     if Student.query.filter_by(student_code=student_code).first():
-        return jsonify({"error": f"A student with ID {student_code} already exists"}), 409 # 409 Conflict
+        return jsonify({"error": f"A student with ID {student_code} already exists"}), 409
 
     # 3. --- Process Image and Get Embedding ---
     try:
@@ -44,10 +46,11 @@ def register_student():
                 error_message = f"Multiple ({num_faces}) faces were detected. Please upload an image with only one person."
             return jsonify({"error": error_message}), 400
         
-        # Create and save the new student
+        # Create and save the new student - add department parameter
         new_student = Student(
-            student_code=student_code, # type: ignore
-            full_name=full_name, # type: ignore
+            student_code=student_code,
+            full_name=full_name,
+            department=department,  
         )
         new_student.set_embedding(embedding)
         db.session.add(new_student)
@@ -56,11 +59,15 @@ def register_student():
         # Reload known faces in memory to include the new student
         add_student_to_known_faces(new_student)
 
-        logger.info(f"Successfully registered new student: {full_name} ({student_code})")
+        logger.info(f"Successfully registered new student: {full_name} ({student_code}) in department {department}")
         return jsonify({
             "message": "Student registered successfully!",
-            "student": {"full_name": full_name, "student_code": student_code}
-        }), 201 # 201 Created
+            "student": {
+                "full_name": full_name, 
+                "student_code": student_code, 
+                "department": department
+            }
+        }), 201
 
     except Exception as e:
         db.session.rollback()

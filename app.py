@@ -29,16 +29,14 @@ def create_app(config_name='development'):
     bcrypt.init_app(app)
     login_manager.init_app(app)
     
-    # Set login_view AFTER initializing with the app
-    # Use the correct endpoint name (check your auth_bp)
-    login_manager.login_view = 'auth.login'  # Changed from 'auth_api.login'
+    login_manager.login_view = 'auth_api.login' 
     login_manager.login_message_category = 'info'
 
     # Register blueprints
     app.register_blueprint(view_bp)
     app.register_blueprint(dashboard_bp)
     app.register_blueprint(registration_bp)
-    app.register_blueprint(auth_bp)  # Make sure this is named 'auth'
+    app.register_blueprint(auth_bp)  
     app.register_blueprint(admin_bp)
 
     # --- INITIALIZE LOGGER ---

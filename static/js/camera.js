@@ -80,6 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const formData = new FormData();
             formData.append('full_name', document.getElementById('full_name').value);
             formData.append('student_code', document.getElementById('student_code').value);
+            formData.append('department', document.getElementById('department').value); // Added department field
             formData.append('image', blob, 'registration_photo.jpg');
 
             // d. Send the data to the /api/register endpoint
